@@ -73,7 +73,6 @@ set listchars=tab:·· " табы показываем точками
 set list "подсветка невидимых символов
 set mouse=a
 "set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
 "set statusline+=%*
 set guifont=Liberation\ Mono\ 10
 set linebreak " перенос по словам а не по буквам
@@ -166,20 +165,6 @@ filetype plugin indent on
 " Pathogen init
 call pathogen#infect()
 "
-" Syntastic cool plugin!
-let g:syntastic_mode_map = { 'mode': 'active', 'active_filetypes': [], 'passive_filetypes': ['html','java', 'scala'] }
-let g:syntastic_enable_signs=1
-" go ahead and check files when we open them
-let g:syntastic_check_on_open=1
-let g:syntastic_auto_jump=1
-let g:syntastic_auto_loc_list=1
-" use fancy symbols for errors and warnings
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
-
-" use balloons!
-let g:syntastic_enable_balloons = 0
-
 ""
 " end myconfig
 

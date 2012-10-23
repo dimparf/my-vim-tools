@@ -1,2 +1,9 @@
 [Dolphin]
+<<<<<<< HEAD
 Timestamp=2012,10,23,11,15,29
+=======
+Timestamp=2012,2,13,17,55,24
+
+[Settings]
+HiddenFilesShown=true
+>>>>>>> 4a423bd3a076f239157a1479c2e9c39c8b4d68bc
