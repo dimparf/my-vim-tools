@@ -1,0 +1,6 @@
+*/bin/
+*/gen/
+/.idea/workspace.xml
+/out/
+*/proguard_logs/
+*.apk
