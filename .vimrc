@@ -1,8 +1,3 @@
-" When started as "evim", evim.vim will already have done these settings.
-if v:progname =~? "evim"
-  finish
-endif
-
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
 set nocompatible
@@ -52,15 +47,11 @@ function ShortTabLine()
        if filename == ''
            let filename = 'noname'
        endif
-        
-        " " Если название слишком длинное — показываем только 6 первых
-        " символов
 
-       let ret .= '[' . filename . ']'
+       let ret .= '|' . filename . '|'
    endfor
         
    " заполняем лишнее пространство
-
    let ret .= '%#TabLineFill#%T'
    return ret
 endfunction
@@ -68,52 +59,56 @@ endfunction
 set tabline=%!ShortTabLine()
 set hidden              " не требовать сохранения буфера
 " set autochdir         " текущий каталог всегда совпадает с содержимым активного окна
+set smartindent " умные отступы например автоотступ после {
+set autoread " if file changed - buffer autorefersh
 set number              " set line number
+" автозакрыте кавычек
 set wrap
+" set scrollbind
+set listchars=tab:·· " табы показываем точками
+set list "подсветка невидимых символов
 set mouse=a
+"set statusline+=%#warningmsg#
+"set statusline+=%*
 set guifont=Liberation\ Mono\ 10
-set linebreak " разрываем строку только между словами
+set linebreak " перенос по словам а не по буквам
 "set tab to 4 spaces
 set tabstop=4  
 set shiftwidth=4
+let mapleader = ","
 set smarttab
 set expandtab
-set backupdir=~/.vim/backup
+"set backupdir=~/.vim/backup
+set nobackup
 set directory=~/.vim/swap
 set autowrite " autosave когда переключаешься на другой файл
+au FocusLost * :wa " write all if focus lost
 set encoding=utf-8
 set fileencodings=utf-8,cp1251,koi8-r,cp866
 set showmatch " проверка скобок
 set cursorline " подсветка текущей строки
+set statusline=%1*%F%h%m\ [Time:\ %{strftime(\"%H:%M\")}]\ [Mod\ Time:\ %{strftime(\"%H:%M:%S\",getftime(expand(\"\%\%\")))}]%=\ [%p%%]\ [%l/%L]
 " Тема...
 set t_Co=256
+set background=dark
 " colorscheme vibrantink
-colorscheme zenburn
-" set background=dark
-" colorscheme solarized
+"colorscheme zenburn
 " colorscheme vc
-" colorscheme molokai
+"colorscheme molokai
 " colorscheme jellyx
+" colorscheme hickop
+" Автодополнение
 " Vim умеет автодополнение слов, сделаем его доступным по нажатию Tab 
-set complete=""
-set complete+=.
-set complete+=k
-set complete+=b
-set complete+=t
+set omnifunc=javacomplete#Complete
+set completefunc=javacomplete#CompleteParamsInfo
+set complete=.,w,b,u,t,i
+autocmd FileType java runtime! autoload/javacomplete.vim
+" CTRL-F для omni completion
+imap <C-F> <C-X><C-O>
+inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P>
+inoremap <buffer> <C-S-Space> <C-X><C-U><C-P>
 " Обозреватель тегов
-"let Tlist_Use_Right_Window = 1
-"let Tlist_GainFocus_On_ToggleOpen = 1   " Jump to taglist window to open
-"let Tlist_Close_On_Select         = 0   " Close taglist when a file or tag selected
-"let Tlist_Exit_OnlyWindow         = 1   " If you are last kill your self
-"let Tlist_Show_One_File           = 1   " Displaying tags for only one file
-"let Tlist_Use_Right_Window        = 1   " split to rigt side of the screen
-"let Tlist_Compart_Format          = 1   " Remove extra information and blank lines from taglist window
-"let Tlist_Compact_Format          = 1   " Do not show help
-"let Tlist_Enable_Fold_Column      = 0   " Don't Show the fold indicator column
-"let Tlist_WinWidth                = 30  " Taglist win width
-"let Tlist_Display_Tag_Scope       = 1   " Show tag scope next to the tag name
-"let Tlist_BackToEditBuffer        = 0   " If no close on select, let the user choose back to edit buffer or not
-"nnoremap <silent> <F8> :TlistToggle<CR>
+nnoremap <silent> <F8> :TagbarToggle<CR>
 " Обозреватель файлов (plugin-NERD_Tree)
 let NERDTreeWinPos = 'left'
 let NERDChristmasTree = 0
@@ -122,12 +117,10 @@ autocmd BufEnter * NERDTreeMirror
 map  <F2>      :NERDTreeToggle<cr>
 vmap <F2> <esc>:NERDTreeToggle<cr>
 imap <F2> <esc>:NERDTreeToggle<cr>
+"NerdCommenter
+nmap <leader># :call NERDComment(0, "invert")<cr>
+vmap <leader># :call NERDComment(0, "invert")<cr>
 
-" FuzzyFinder - нечеткий поиск
-map <C-F1> :FufHelp<cr>
-vmap <C-F1> <esc>:FufHelp<cr>
-imap <C-F1> <esc>:FufHelp<cr>
-" Просмотр списка буферов
 map <F6> :FufBuffer<cr>
 vmap <F6> <esc>:FufBuffer<cr>
 imap <F6> <esc>:FufBuffer<cr>
@@ -137,12 +130,55 @@ vmap <F7> <esc>:FufFile<cr>
 imap <F7> <esc>:FufFile<cr>
 " Рекурсивный поиск
 nnoremap <silent> <F3> :Rgrep<cr>
+
+"Это позволит увидеть все вхождение тега, выбрать нужное и открыть его в новом окне по нажатию F4
+map <F4> [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR> 
 set pastetoggle=<F5> "сохраняет форматирование вставляемого текста.
 " если сохраняеться скрипт - то он делаеться исполняемым
 au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod a+x <afile> | endif | endif
-" Для сборки Java-ant проектов.
-" set makeprg=~<PATH_TO_JAVA_BUIL_TOOL>\ -emacs
-" Форматирование Scala-кода
+
+"" Vundle
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+Bundle 'gmarik/vundle'
+Bundle 'L9'
+Bundle 'rails.vim'
+Bundle 'Rename'
+Bundle 'snipMate'
+Bundle 'FuzzyFinder'
+Bundle 'grep.vim'
+Bundle 'scrooloose/nerdtree'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'derekwyatt/vim-scala'
+Bundle 'tpope/vim-pathogen'
+Bundle 'majutsushi/tagbar'
+"VIMSIDE
+Bundle 'Shougo/vimshell'
+Bundle 'Shougo/vimproc'
+"Bundle 'megaannum/vimside'
+filetype plugin indent on
+" Pathogen init
+call pathogen#infect()
+
+"For tagbar scala support
+let g:tagbar_type_scala = {
+    \ 'ctagstype' : 'Scala',
+    \ 'kinds'     : [
+        \ 'p:packages:1',
+        \ 'V:values',
+        \ 'v:variables',
+        \ 'T:types',
+        \ 't:traits',
+        \ 'o:objects',
+        \ 'a:aclasses',
+        \ 'c:classes',
+        \ 'r:cclasses',
+        \ 'm:methods'
+    \ ]
+\ }
+
 " end myconfig
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
@@ -150,10 +186,6 @@ au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !ch
 
 " Don't use Ex mode, use Q for formatting
 map Q gq
-
-" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
-" so that you can undo CTRL-U after inserting a line break.
-inoremap <C-U> <C-G>u<C-U>
 
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
@@ -172,7 +204,8 @@ if has("autocmd")
   filetype plugin indent on
   filetype on
   filetype plugin on
-
+  autocmd Filetype java setlocal omnifunc=javacomplete#Complete
+  autocmd Filetype java setlocal completefunc=javacomplete#CompleteParamsInfo
   " Put these in an autocmd group, so that we can delete them easily.
   augroup vimrcEx
   au!
@@ -205,3 +238,33 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 		  \ | wincmd p | diffthis
 endif
+" lazy method of appending this onto your .vimrc ":w! >> ~/.vimrc"
+" ------------------------------------------------------------------
+" this block of commands has been autogenerated by solarized.vim and
+" includes the current, non-default Solarized option values.
+" To use, place these commands in your .vimrc file (replacing any
+" existing colorscheme commands). See also ":help solarized"
+
+" ------------------------------------------------------------------
+" Solarized Colorscheme Config
+" ------------------------------------------------------------------
+let g:solarized_termcolors=256    "default value is 16
+let g:solarized_hitrail=1    "default value is 0
+syntax enable
+set background=dark
+colorscheme solarized
+" ------------------------------------------------------------------
+
+" The following items are available options, but do not need to be
+" included in your .vimrc as they are currently set to their defaults.
+
+" let g:solarized_termtrans=0
+" let g:solarized_degrade=0
+" let g:solarized_bold=1
+" let g:solarized_underline=1
+" let g:solarized_italic=1
+" let g:solarized_contrast="normal"
+" let g:solarized_visibility="normal"
+" let g:solarized_diffmode="normal"
+" let g:solarized_menu=1
+
