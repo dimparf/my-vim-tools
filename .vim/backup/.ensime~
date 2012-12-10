@@ -1,0 +1,10 @@
+;; this work in order to explore ensime sources
+(
+:use-sbt t
+;; or
+;; :use-maven t
+
+:compile-jars (dist/lib)
+:source-roots (src/main/scala)
+:root-dir (.)
+)

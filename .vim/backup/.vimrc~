@@ -1,3 +1,8 @@
+" When started as "evim", evim.vim will already have done these settings.
+if v:progname =~? "evim"
+  finish
+endif
+
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
 set nocompatible
@@ -64,52 +69,36 @@ set autoread " if file changed - buffer autorefersh
 set number              " set line number
 " автозакрыте кавычек
 set wrap
-<<<<<<< HEAD
-" set scrollbind
-=======
->>>>>>> 0599df5a40cf5427a4cb6bf28be993301d71ac4c
 set listchars=tab:·· " табы показываем точками
 set list "подсветка невидимых символов
 set mouse=a
 "set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
 "set statusline+=%*
 set guifont=Liberation\ Mono\ 10
 set linebreak " перенос по словам а не по буквам
 "set tab to 4 spaces
 set tabstop=4  
 set shiftwidth=4
-let mapleader = ","
 set smarttab
 set expandtab
-"set backupdir=~/.vim/backup
-set nobackup
+set backupdir=~/.vim/backup
 set directory=~/.vim/swap
 set autowrite " autosave когда переключаешься на другой файл
-au FocusLost * :wa " write all if focus lost
 set encoding=utf-8
 set fileencodings=utf-8,cp1251,koi8-r,cp866
 set showmatch " проверка скобок
 set cursorline " подсветка текущей строки
-set statusline=%1*%F%h%m\ [Time:\ %{strftime(\"%H:%M\")}]\ [Mod\ Time:\ %{strftime(\"%H:%M:%S\",getftime(expand(\"\%\%\")))}]%=\ [%p%%]\ [%l/%L]
 " Тема...
 set t_Co=256
-set background=dark
 " colorscheme vibrantink
-<<<<<<< HEAD
-"colorscheme zenburn
-=======
 " colorscheme zenburn
 set background=dark
 " colorscheme solarized
->>>>>>> 0599df5a40cf5427a4cb6bf28be993301d71ac4c
 " colorscheme vc
-"colorscheme molokai
+" colorscheme molokai
 " colorscheme jellyx
-<<<<<<< HEAD
-" colorscheme hickop
-=======
 colorscheme hickop
->>>>>>> 0599df5a40cf5427a4cb6bf28be993301d71ac4c
 " Автодополнение
 " Vim умеет автодополнение слов, сделаем его доступным по нажатию Tab 
 set omnifunc=javacomplete#Complete
@@ -121,11 +110,7 @@ imap <C-F> <C-X><C-O>
 inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P>
 inoremap <buffer> <C-S-Space> <C-X><C-U><C-P>
 " Обозреватель тегов
-<<<<<<< HEAD
-nnoremap <silent> <F8> :TagbarToggle<CR>
-=======
 nnoremap <silent> <F8> :TagbarOpen<CR>
->>>>>>> 0599df5a40cf5427a4cb6bf28be993301d71ac4c
 " Обозреватель файлов (plugin-NERD_Tree)
 let NERDTreeWinPos = 'left'
 let NERDChristmasTree = 0
@@ -134,14 +119,7 @@ autocmd BufEnter * NERDTreeMirror
 map  <F2>      :NERDTreeToggle<cr>
 vmap <F2> <esc>:NERDTreeToggle<cr>
 imap <F2> <esc>:NERDTreeToggle<cr>
-<<<<<<< HEAD
-"NerdCommenter
-nmap <leader># :call NERDComment(0, "invert")<cr>
-vmap <leader># :call NERDComment(0, "invert")<cr>
-
-=======
 "" 
->>>>>>> 0599df5a40cf5427a4cb6bf28be993301d71ac4c
 map <F6> :FufBuffer<cr>
 vmap <F6> <esc>:FufBuffer<cr>
 imap <F6> <esc>:FufBuffer<cr>
@@ -168,40 +146,6 @@ Bundle 'L9'
 Bundle 'rails.vim'
 Bundle 'Rename'
 Bundle 'snipMate'
-<<<<<<< HEAD
-Bundle 'FuzzyFinder'
-Bundle 'grep.vim'
-Bundle 'scrooloose/nerdtree'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'derekwyatt/vim-scala'
-Bundle 'tpope/vim-pathogen'
-Bundle 'majutsushi/tagbar'
-"VIMSIDE
-Bundle 'Shougo/vimshell'
-Bundle 'Shougo/vimproc'
-"Bundle 'megaannum/vimside'
-filetype plugin indent on
-" Pathogen init
-call pathogen#infect()
-
-"For tagbar scala support
-let g:tagbar_type_scala = {
-    \ 'ctagstype' : 'Scala',
-    \ 'kinds'     : [
-        \ 'p:packages:1',
-        \ 'V:values',
-        \ 'v:variables',
-        \ 'T:types',
-        \ 't:traits',
-        \ 'o:objects',
-        \ 'a:aclasses',
-        \ 'c:classes',
-        \ 'r:cclasses',
-        \ 'm:methods'
-    \ ]
-\ }
-
-=======
 Bundle 'taglist.vim'
 Bundle 'FuzzyFinder'
 Bundle 'grep.vim'
@@ -210,20 +154,33 @@ Bundle 'derekwyatt/vim-scala'
 Bundle 'tpope/vim-pathogen'
 Bundle 'majutsushi/tagbar'
 " ENSIME
-"Bundle 'jlc/vim-async-beans'
-"Bundle 'jlc/vim-addon-async'
-"Bundle 'MarcWeber/vim-addon-signs'
-"Bundle 'MarcWeber/vim-addon-manager'
-"Bundle 'emoncannon/ensime'
-"Bundle 'jlc/envim'
-"Bundle 'jlc/ensime-common'
+Bundle 'jlc/vim-async-beans'
+Bundle 'jlc/vim-addon-async'
+Bundle 'MarcWeber/vim-addon-signs'
+Bundle 'MarcWeber/vim-addon-manager'
+Bundle 'emoncannon/ensime'
+Bundle 'jlc/envim'
+Bundle 'jlc/ensime-common'
 
 filetype plugin indent on
 " Pathogen init
 call pathogen#infect()
 "
+" Syntastic cool plugin!
+let g:syntastic_mode_map = { 'mode': 'active', 'active_filetypes': [], 'passive_filetypes': ['html','java', 'scala'] }
+let g:syntastic_enable_signs=1
+" go ahead and check files when we open them
+let g:syntastic_check_on_open=1
+let g:syntastic_auto_jump=1
+let g:syntastic_auto_loc_list=1
+" use fancy symbols for errors and warnings
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+
+" use balloons!
+let g:syntastic_enable_balloons = 0
+
 ""
->>>>>>> 0599df5a40cf5427a4cb6bf28be993301d71ac4c
 " end myconfig
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
@@ -283,33 +240,3 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 		  \ | wincmd p | diffthis
 endif
-" lazy method of appending this onto your .vimrc ":w! >> ~/.vimrc"
-" ------------------------------------------------------------------
-" this block of commands has been autogenerated by solarized.vim and
-" includes the current, non-default Solarized option values.
-" To use, place these commands in your .vimrc file (replacing any
-" existing colorscheme commands). See also ":help solarized"
-
-" ------------------------------------------------------------------
-" Solarized Colorscheme Config
-" ------------------------------------------------------------------
-let g:solarized_termcolors=256    "default value is 16
-let g:solarized_hitrail=1    "default value is 0
-syntax enable
-set background=dark
-colorscheme solarized
-" ------------------------------------------------------------------
-
-" The following items are available options, but do not need to be
-" included in your .vimrc as they are currently set to their defaults.
-
-" let g:solarized_termtrans=0
-" let g:solarized_degrade=0
-" let g:solarized_bold=1
-" let g:solarized_underline=1
-" let g:solarized_italic=1
-" let g:solarized_contrast="normal"
-" let g:solarized_visibility="normal"
-" let g:solarized_diffmode="normal"
-" let g:solarized_menu=1
-
