@@ -2,8 +2,9 @@ VIM config for Ruby, Rails, Groovy and Java development.
 Requried: ctags.
 
 Used plugins:
+Vundle - Easy Vim package managment tool.
 Rails - Rails commands, easy navigation, jump to Model, View and more.
-NERDTree - Improved Project/Filesystem Tree. 
+NERDTree - Improved Project/Filesystem Tree.
 FuzzyFinder - Quikly reach the buffer/file/command/tag explorer finder.
 SnipMate - TextMate snippets for Vim (extensible).
 Surround - Delete/Change/Add parentheses, quotes, XML tags and more.
